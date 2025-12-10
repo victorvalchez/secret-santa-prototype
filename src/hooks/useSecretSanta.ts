@@ -32,10 +32,25 @@ export function useSecretSanta() {
       const { data: stateData, error: stateError } = await supabase
         .from("draw_state")
         .select("*")
+        .limit(1)
         .maybeSingle();
 
       if (stateError) throw stateError;
-      setDrawState(stateData);
+
+      let resolvedState = stateData;
+
+      if (!resolvedState) {
+        const { data: insertedState, error: insertError } = await supabase
+          .from("draw_state")
+          .insert({})
+          .select()
+          .single();
+
+        if (insertError) throw insertError;
+        resolvedState = insertedState;
+      }
+
+      setDrawState(resolvedState);
 
       // Fetch participants
       const { data: participantsData, error: participantsError } = await supabase

@@ -58,7 +58,7 @@ const JoinForm = ({ onJoin, disabled }: JoinFormProps) => {
             type={showPin ? "text" : "password"}
             value={pin}
             onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            placeholder="1234"
+            placeholder="0000"
             className="festive-input w-full pr-10"
             disabled={disabled || loading}
             inputMode="numeric"

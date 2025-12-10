@@ -38,7 +38,7 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.draw_state (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
-    admin_pin text DEFAULT '1234'::text NOT NULL,
+    admin_pin text DEFAULT '0000'::text NOT NULL,
     is_drawn boolean DEFAULT false NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     drawn_at timestamp with time zone

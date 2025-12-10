@@ -138,7 +138,7 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
               </button>
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Default PIN is 1234 — change it in settings
+              Default PIN is 0000 — change it in settings
             </p>
           </div>
 
