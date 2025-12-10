@@ -34,14 +34,14 @@ const JoinForm = ({ onJoin, disabled }: JoinFormProps) => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1">
-          Your Name
+          Tu nombre
         </label>
         <input
           id="name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name..."
+          placeholder="Escribe tu nombre..."
           className="festive-input w-full"
           disabled={disabled || loading}
           maxLength={30}
@@ -50,7 +50,7 @@ const JoinForm = ({ onJoin, disabled }: JoinFormProps) => {
       
       <div>
         <label htmlFor="pin" className="block text-sm font-medium text-foreground mb-1">
-          Your PIN (4+ digits)
+          Tu PIN (4+ dígitos)
         </label>
         <div className="relative">
           <input
@@ -72,7 +72,7 @@ const JoinForm = ({ onJoin, disabled }: JoinFormProps) => {
           </button>
         </div>
         <p className="text-xs text-muted-foreground mt-1">
-          Remember this PIN to check your assignment later
+          Guarda este PIN para consultar tu asignación después
         </p>
       </div>
 
@@ -82,7 +82,7 @@ const JoinForm = ({ onJoin, disabled }: JoinFormProps) => {
         className="w-full festive-button flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         <UserPlus className="w-5 h-5" />
-        {loading ? "Joining..." : "Join Secret Santa"}
+        {loading ? "Uniéndote..." : "Unirme al Amigo Invisible"}
       </button>
     </form>
   );

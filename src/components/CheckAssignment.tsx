@@ -40,7 +40,7 @@ const CheckAssignment = ({ onCheck }: CheckAssignmentProps) => {
         
         <div className="space-y-2">
           <p className="text-lg text-muted-foreground">
-            {name}, you are giving a gift to:
+            {name}, vas a dar un regalo a:
           </p>
           <p className="font-display text-3xl sm:text-4xl font-bold text-accent animate-scale-in">
             {result}
@@ -48,14 +48,14 @@ const CheckAssignment = ({ onCheck }: CheckAssignmentProps) => {
         </div>
 
         <p className="text-sm text-muted-foreground">
-          Remember: keep it a secret! 🤫
+          Recuerda: ¡manténlo en secreto! 🤫
         </p>
 
         <button
           onClick={handleReset}
           className="festive-button"
         >
-          Check Another
+          Consultar otra persona
         </button>
       </div>
     );
@@ -66,20 +66,20 @@ const CheckAssignment = ({ onCheck }: CheckAssignmentProps) => {
       <div className="text-center mb-6">
         <Gift className="w-12 h-12 mx-auto text-accent mb-2" />
         <p className="text-muted-foreground">
-          Enter your name and PIN to see who you're gifting
+          Ingresa tu nombre y PIN para ver a quién te toca regalar
         </p>
       </div>
 
       <div>
         <label htmlFor="check-name" className="block text-sm font-medium text-foreground mb-1">
-          Your Name
+          Tu nombre
         </label>
         <input
           id="check-name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name..."
+          placeholder="Escribe tu nombre..."
           className="festive-input w-full"
           disabled={loading}
           maxLength={30}
@@ -88,7 +88,7 @@ const CheckAssignment = ({ onCheck }: CheckAssignmentProps) => {
 
       <div>
         <label htmlFor="check-pin" className="block text-sm font-medium text-foreground mb-1">
-          Your PIN
+          Tu PIN
         </label>
         <div className="relative">
           <input
@@ -96,7 +96,7 @@ const CheckAssignment = ({ onCheck }: CheckAssignmentProps) => {
             type={showPin ? "text" : "password"}
             value={pin}
             onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            placeholder="Your 4-digit PIN"
+            placeholder="Tu PIN de 4 dígitos"
             className="festive-input w-full pr-10"
             disabled={loading}
             inputMode="numeric"
@@ -117,12 +117,12 @@ const CheckAssignment = ({ onCheck }: CheckAssignmentProps) => {
         className="w-full festive-button-accent flex items-center justify-center gap-2 py-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         <Search className="w-5 h-5" />
-        {loading ? "Checking..." : "Check My Assignment"}
+        {loading ? "Consultando..." : "Ver mi asignación"}
       </button>
 
       {checked && !result && (
         <p className="text-center text-sm text-destructive">
-          Could not find your assignment. Check your name and PIN.
+          No encontramos tu asignación. Revisa tu nombre y PIN.
         </p>
       )}
     </form>

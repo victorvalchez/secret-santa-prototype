@@ -37,7 +37,7 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
 
   const handleWipe = async () => {
     if (!pin || pin.length < 4) return;
-    if (!confirm("Are you sure you want to remove ALL participants? This cannot be undone.")) return;
+    if (!confirm("¿Seguro que quieres eliminar a TODAS las personas participantes? Esta acción no se puede deshacer.")) return;
     setLoading(true);
     await onWipe(pin);
     setLoading(false);
@@ -60,7 +60,7 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
     <div className="festive-card p-4 sm:p-6 border-2 border-accent/30">
       <div className="flex items-center gap-2 mb-4">
         <Shield className="w-5 h-5 text-accent" />
-        <h2 className="font-display text-xl font-semibold">Admin Controls</h2>
+        <h2 className="font-display text-xl font-semibold">Controles de administración</h2>
         <button
           onClick={() => setShowSettings(!showSettings)}
           className="ml-auto text-muted-foreground hover:text-foreground transition-colors"
@@ -73,14 +73,14 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
-              Current Admin PIN
+              PIN actual de administración
             </label>
             <div className="relative">
               <input
                 type={showPin ? "text" : "password"}
                 value={pin}
                 onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                placeholder="Current PIN"
+                placeholder="PIN actual"
                 className="festive-input w-full pr-10"
                 inputMode="numeric"
               />
@@ -95,13 +95,13 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
           </div>
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
-              New Admin PIN
+              Nuevo PIN de administración
             </label>
             <input
               type="text"
               value={newPin}
               onChange={(e) => setNewPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
-              placeholder="New PIN (4+ digits)"
+              placeholder="Nuevo PIN (4+ dígitos)"
               className="festive-input w-full"
               inputMode="numeric"
             />
@@ -111,21 +111,21 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
             disabled={loading || !pin || !newPin || newPin.length < 4}
             className="w-full festive-button disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Updating..." : "Update PIN"}
+            {loading ? "Actualizando..." : "Actualizar PIN"}
           </button>
         </div>
       ) : (
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-foreground mb-1">
-              Admin PIN
+              PIN de administración
             </label>
             <div className="relative">
               <input
                 type={showPin ? "text" : "password"}
                 value={pin}
                 onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                placeholder="Enter admin PIN"
+                placeholder="Ingresa el PIN de administración"
                 className="festive-input w-full pr-10"
                 inputMode="numeric"
               />
@@ -138,7 +138,7 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
               </button>
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Default PIN is 0000 — change it in settings
+              El PIN predeterminado es 0000 — cámbialo en la configuración
             </p>
           </div>
 
@@ -150,7 +150,7 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
                 className="flex-1 festive-button-accent flex items-center justify-center gap-2 py-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 <Sparkles className="w-5 h-5" />
-                {loading ? "Drawing..." : "Draw Now!"}
+                {loading ? "Realizando sorteo..." : "¡Sortear ahora!"}
               </button>
             ) : (
               <button
@@ -159,14 +159,14 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
                 className="flex-1 festive-button flex items-center justify-center gap-2 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <RotateCcw className="w-5 h-5" />
-                {loading ? "Resetting..." : "Reset Draw"}
+                {loading ? "Restableciendo..." : "Reiniciar sorteo"}
               </button>
             )}
           </div>
 
           {!canDraw && !isDrawn && (
             <p className="text-center text-sm text-muted-foreground">
-              Need {3 - participantCount} more participant{3 - participantCount !== 1 ? "s" : ""}
+              Faltan {3 - participantCount} participante{3 - participantCount !== 1 ? "s" : ""}
             </p>
           )}
 
@@ -177,7 +177,7 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
               className="w-full flex items-center justify-center gap-2 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Trash2 className="w-4 h-4" />
-              Wipe All Participants
+              Eliminar a todas las personas participantes
             </button>
           )}
         </div>

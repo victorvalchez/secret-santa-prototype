@@ -26,17 +26,17 @@ const ResultCard = ({ giver, receiver, index }: ResultCardProps) => {
             <p className="text-sm text-muted-foreground">
               {revealed ? (
                 <span className="text-primary font-medium animate-fade-in">
-                  gives to <span className="text-accent">{receiver}</span>
+                  le regala a <span className="text-accent">{receiver}</span>
                 </span>
               ) : (
-                "Tap to reveal"
+                "Toca para revelar"
               )}
             </p>
           </div>
         </div>
         <button
           className="p-2 hover:bg-secondary rounded-lg transition-colors"
-          aria-label={revealed ? "Hide assignment" : "Reveal assignment"}
+          aria-label={revealed ? "Ocultar asignación" : "Revelar asignación"}
         >
           {revealed ? (
             <EyeOff className="w-5 h-5 text-muted-foreground" />

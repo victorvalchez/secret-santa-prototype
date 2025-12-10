@@ -19,7 +19,7 @@ const DrawButton = ({ onDraw, onReset, canDraw, hasDrawn, participantCount }: Dr
         className="w-full festive-button-accent flex items-center justify-center gap-2 py-4"
       >
         <RotateCcw className="w-5 h-5" />
-        Start New Draw
+        Iniciar un nuevo sorteo
       </button>
     );
   }
@@ -32,11 +32,11 @@ const DrawButton = ({ onDraw, onReset, canDraw, hasDrawn, participantCount }: Dr
         className="w-full festive-button-accent flex items-center justify-center gap-2 py-4 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         <Sparkles className="w-5 h-5" />
-        Draw Secret Santas!
+        ¡Realizar sorteo del Amigo Invisible!
       </button>
       {!canDraw && participantCount > 0 && (
         <p className="text-center text-sm text-muted-foreground">
-          Add {needed} more {needed === 1 ? "person" : "people"} to start
+          Agrega {needed} {needed === 1 ? "persona" : "personas"} más para comenzar
         </p>
       )}
     </div>

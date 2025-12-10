@@ -62,7 +62,7 @@ export function useSecretSanta() {
       setParticipants(participantsData || []);
     } catch (error) {
       console.error("Error fetching data:", error);
-      toast.error("Failed to load data");
+      toast.error("No se pudieron cargar los datos");
     } finally {
       setLoading(false);
     }
@@ -71,13 +71,13 @@ export function useSecretSanta() {
   const addParticipant = async (name: string, pin: string) => {
     // Check if name already exists
     if (participants.some(p => p.name.toLowerCase() === name.toLowerCase())) {
-      toast.error("This name is already in the list!");
+      toast.error("Ese nombre ya está en la lista");
       return false;
     }
 
     // Check if draw already happened
     if (drawState?.is_drawn) {
-      toast.error("Draw has already been done!");
+      toast.error("¡El sorteo ya se realizó!");
       return false;
     }
 
@@ -90,18 +90,18 @@ export function useSecretSanta() {
 
       if (error) throw error;
       setParticipants([...participants, data]);
-      toast.success(`${name} joined the Secret Santa!`);
+      toast.success(`${name} se unió al Amigo Invisible`);
       return true;
     } catch (error) {
       console.error("Error adding participant:", error);
-      toast.error("Failed to add participant");
+      toast.error("No se pudo agregar a la persona participante");
       return false;
     }
   };
 
   const removeParticipant = async (id: string) => {
     if (drawState?.is_drawn) {
-      toast.error("Cannot remove after draw!");
+      toast.error("No puedes eliminar personas después del sorteo");
       return false;
     }
 
@@ -113,18 +113,18 @@ export function useSecretSanta() {
 
       if (error) throw error;
       setParticipants(participants.filter(p => p.id !== id));
-      toast.info("Participant removed");
+      toast.info("Persona participante eliminada");
       return true;
     } catch (error) {
       console.error("Error removing participant:", error);
-      toast.error("Failed to remove participant");
+      toast.error("No se pudo eliminar a la persona participante");
       return false;
     }
   };
 
   const wipeParticipants = async (adminPin: string) => {
     if (drawState?.admin_pin !== adminPin) {
-      toast.error("Invalid admin PIN!");
+      toast.error("PIN de administración inválido");
       return false;
     }
 
@@ -146,11 +146,11 @@ export function useSecretSanta() {
         setDrawState({ ...drawState, is_drawn: false });
       }
       
-      toast.success("All participants removed!");
+      toast.success("¡Se eliminaron todas las personas participantes!");
       return true;
     } catch (error) {
       console.error("Error wiping participants:", error);
-      toast.error("Failed to wipe participants");
+      toast.error("No se pudo eliminar a las personas participantes");
       return false;
     }
   };
@@ -158,12 +158,12 @@ export function useSecretSanta() {
   const performDraw = async (adminPin: string) => {
     // Validate admin PIN
     if (drawState?.admin_pin !== adminPin) {
-      toast.error("Invalid admin PIN!");
+      toast.error("PIN de administración inválido");
       return false;
     }
 
     if (participants.length < 3) {
-      toast.error("Need at least 3 participants!");
+      toast.error("¡Necesitas al menos 3 participantes!");
       return false;
     }
 
@@ -191,11 +191,11 @@ export function useSecretSanta() {
 
       setDrawState({ ...drawState, is_drawn: true });
       await fetchData(); // Refresh participants with assignments
-      toast.success("Secret Santa draw complete! 🎅");
+      toast.success("¡Sorteo de Amigo Invisible completado! 🎅");
       return true;
     } catch (error) {
       console.error("Error performing draw:", error);
-      toast.error("Failed to perform draw");
+      toast.error("No se pudo realizar el sorteo");
       return false;
     }
   };
@@ -206,17 +206,17 @@ export function useSecretSanta() {
     );
 
     if (!participant) {
-      toast.error("Invalid name or PIN");
+      toast.error("Nombre o PIN incorrecto");
       return null;
     }
 
     if (!drawState?.is_drawn) {
-      toast.error("Draw hasn't happened yet!");
+      toast.error("¡El sorteo aún no ocurre!");
       return null;
     }
 
     if (!participant.assigned_to) {
-      toast.error("No assignment found");
+      toast.error("No encontramos tu asignación");
       return null;
     }
 
@@ -226,7 +226,7 @@ export function useSecretSanta() {
 
   const resetDraw = async (adminPin: string) => {
     if (drawState?.admin_pin !== adminPin) {
-      toast.error("Invalid admin PIN!");
+      toast.error("PIN de administración inválido");
       return false;
     }
 
@@ -249,18 +249,18 @@ export function useSecretSanta() {
 
       setDrawState({ ...drawState, is_drawn: false });
       await fetchData();
-      toast.success("Draw reset!");
+      toast.success("¡Sorteo reiniciado!");
       return true;
     } catch (error) {
       console.error("Error resetting:", error);
-      toast.error("Failed to reset");
+      toast.error("No se pudo reiniciar");
       return false;
     }
   };
 
   const updateAdminPin = async (oldPin: string, newPin: string) => {
     if (drawState?.admin_pin !== oldPin) {
-      toast.error("Invalid current PIN!");
+      toast.error("PIN actual inválido");
       return false;
     }
 
@@ -272,11 +272,11 @@ export function useSecretSanta() {
 
       if (error) throw error;
       setDrawState({ ...drawState, admin_pin: newPin });
-      toast.success("Admin PIN updated!");
+      toast.success("¡PIN de administración actualizado!");
       return true;
     } catch (error) {
       console.error("Error updating PIN:", error);
-      toast.error("Failed to update PIN");
+      toast.error("No se pudo actualizar el PIN");
       return false;
     }
   };

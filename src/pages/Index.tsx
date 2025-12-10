@@ -26,9 +26,9 @@ const Index = () => {
   const isDrawn = drawState?.is_drawn ?? false;
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode; hidden?: boolean }[] = [
-    { id: "join", label: "Join", icon: <Users className="w-4 h-4" />, hidden: isDrawn },
-    { id: "check", label: "Check", icon: <Search className="w-4 h-4" /> },
-    { id: "admin", label: "Admin", icon: <Shield className="w-4 h-4" /> },
+    { id: "join", label: "Unirse", icon: <Users className="w-4 h-4" />, hidden: isDrawn },
+    { id: "check", label: "Consultar", icon: <Search className="w-4 h-4" /> },
+    { id: "admin", label: "Administrar", icon: <Shield className="w-4 h-4" /> },
   ];
 
   // Switch to check tab when draw happens and user is on join tab
@@ -40,7 +40,7 @@ const Index = () => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <Gift className="w-12 h-12 mx-auto text-accent animate-bounce-subtle mb-4" />
-          <p className="text-muted-foreground">Loading Secret Santa...</p>
+          <p className="text-muted-foreground">Cargando Amigo Invisible...</p>
         </div>
       </div>
     );
@@ -57,17 +57,17 @@ const Index = () => {
             <Gift className="w-8 h-8 sm:w-10 sm:h-10 text-accent" />
           </div>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-2">
-            Secret Santa
+            Amigo Invisible
           </h1>
           <p className="text-muted-foreground text-lg">
             {isDrawn 
-              ? "Draw complete! Check your assignment below"
-              : "Join the gift exchange"}
+              ? "¡Sorteo completado! Revisa tu asignación abajo"
+              : "Únete al intercambio de regalos"}
           </p>
           {isDrawn && (
             <div className="inline-flex items-center gap-2 mt-3 bg-accent/20 text-accent px-4 py-2 rounded-full text-sm font-medium">
               <Gift className="w-4 h-4" />
-              Draw Complete
+              Sorteo completado
             </div>
           )}
         </header>
@@ -104,7 +104,7 @@ const Index = () => {
             <section className="festive-card p-4 sm:p-6">
               <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5 text-primary" />
-                Join the Draw
+                Únete al sorteo
               </h2>
               <JoinForm onJoin={addParticipant} disabled={isDrawn} />
             </section>
@@ -114,13 +114,13 @@ const Index = () => {
             <section className="festive-card p-4 sm:p-6">
               <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
                 <Search className="w-5 h-5 text-primary" />
-                Check Your Assignment
+                Consulta tu asignación
               </h2>
               {!isDrawn ? (
                 <div className="text-center py-6">
                   <Gift className="w-12 h-12 mx-auto text-muted-foreground/50 mb-3" />
                   <p className="text-muted-foreground">
-                    Waiting for the admin to perform the draw...
+                    Esperando a que la persona administradora realice el sorteo...
                   </p>
                 </div>
               ) : (
@@ -143,7 +143,7 @@ const Index = () => {
 
         {/* Footer */}
         <footer className="text-center mt-12 text-sm text-muted-foreground">
-          <p>Happy Holidays! 🎄</p>
+          <p>¡Felices fiestas! 🎄</p>
         </footer>
       </div>
     </div>

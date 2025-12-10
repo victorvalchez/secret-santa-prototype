@@ -15,8 +15,8 @@ const ParticipantsList = ({ participants, isDrawn }: ParticipantsListProps) => {
     return (
       <div className="text-center py-8 text-muted-foreground">
         <Gift className="w-12 h-12 mx-auto mb-3 opacity-50" />
-        <p>No participants yet</p>
-        <p className="text-sm mt-1">Be the first to join!</p>
+        <p>Aún no hay participantes</p>
+        <p className="text-sm mt-1">¡Sé la primera persona en unirte!</p>
       </div>
     );
   }
@@ -26,8 +26,8 @@ const ParticipantsList = ({ participants, isDrawn }: ParticipantsListProps) => {
       <div className="flex items-center gap-2 text-muted-foreground">
         <Users className="w-4 h-4" />
         <span className="text-sm">
-          {participants.length} participant{participants.length !== 1 ? "s" : ""}
-          {isDrawn && " — Draw complete!"}
+          {participants.length} participante{participants.length !== 1 ? "s" : ""}
+          {isDrawn && " — sorteo completado"}
         </span>
       </div>
       
@@ -48,7 +48,7 @@ const ParticipantsList = ({ participants, isDrawn }: ParticipantsListProps) => {
 
       {!isDrawn && participants.length < 3 && (
         <p className="text-sm text-muted-foreground text-center pt-2">
-          Need {3 - participants.length} more to start the draw
+          Faltan {3 - participants.length} participante{3 - participants.length !== 1 ? "s" : ""} para iniciar el sorteo
         </p>
       )}
     </div>

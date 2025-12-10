@@ -13,12 +13,12 @@ const ResultsList = ({ assignments }: ResultsListProps) => {
       <div className="flex items-center justify-center gap-3 py-4">
         <TreePine className="w-6 h-6 text-primary" />
         <h2 className="font-display text-2xl font-semibold text-center">
-          Secret Santa Assignments
+          Asignaciones del Amigo Invisible
         </h2>
         <TreePine className="w-6 h-6 text-primary" />
       </div>
       <p className="text-center text-muted-foreground text-sm mb-6">
-        Tap each card to reveal who that person is gifting
+        Toca cada tarjeta para revelar a quién le regala esa persona
       </p>
       <div className="space-y-3">
         {assignments.map((assignment, index) => (

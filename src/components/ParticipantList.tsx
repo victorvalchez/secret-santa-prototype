@@ -11,8 +11,8 @@ const ParticipantList = ({ participants, onRemove, disabled }: ParticipantListPr
     return (
       <div className="text-center py-8 text-muted-foreground">
         <Gift className="w-12 h-12 mx-auto mb-3 opacity-50" />
-        <p>No participants yet</p>
-        <p className="text-sm mt-1">Add at least 3 people to start the draw</p>
+        <p>Aún no hay participantes</p>
+        <p className="text-sm mt-1">Agrega al menos 3 personas para iniciar el sorteo</p>
       </div>
     );
   }
@@ -35,7 +35,7 @@ const ParticipantList = ({ participants, onRemove, disabled }: ParticipantListPr
             <button
               onClick={() => onRemove(index)}
               className="text-muted-foreground hover:text-destructive transition-colors p-1"
-              aria-label={`Remove ${name}`}
+              aria-label={`Eliminar ${name}`}
             >
               <X className="w-5 h-5" />
             </button>
