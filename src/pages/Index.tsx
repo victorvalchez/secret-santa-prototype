@@ -62,7 +62,7 @@ const Index = () => {
           <p className="text-muted-foreground text-lg">
             {isDrawn 
               ? "¡Sorteo completado! Revisa tu asignación abajo"
-              : "Únete al intercambio de regalos"}
+              : "Únete a las Navidades de los Sánchez"}
           </p>
           {isDrawn && (
             <div className="inline-flex items-center gap-2 mt-3 bg-accent/20 text-accent px-4 py-2 rounded-full text-sm font-medium">
