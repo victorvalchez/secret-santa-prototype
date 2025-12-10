@@ -107,6 +107,39 @@ export function useSecretSanta() {
     }
   };
 
+  const wipeParticipants = async (adminPin: string) => {
+    if (drawState?.admin_pin !== adminPin) {
+      toast.error("Invalid admin PIN!");
+      return false;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("participants")
+        .delete()
+        .neq("id", "00000000-0000-0000-0000-000000000000");
+
+      if (error) throw error;
+      setParticipants([]);
+      
+      // Also reset draw state if it was drawn
+      if (drawState?.is_drawn) {
+        await supabase
+          .from("draw_state")
+          .update({ is_drawn: false, drawn_at: null })
+          .eq("id", drawState.id);
+        setDrawState({ ...drawState, is_drawn: false });
+      }
+      
+      toast.success("All participants removed!");
+      return true;
+    } catch (error) {
+      console.error("Error wiping participants:", error);
+      toast.error("Failed to wipe participants");
+      return false;
+    }
+  };
+
   const performDraw = async (adminPin: string) => {
     // Validate admin PIN
     if (drawState?.admin_pin !== adminPin) {
@@ -239,6 +272,7 @@ export function useSecretSanta() {
     loading,
     addParticipant,
     removeParticipant,
+    wipeParticipants,
     performDraw,
     checkAssignment,
     resetDraw,

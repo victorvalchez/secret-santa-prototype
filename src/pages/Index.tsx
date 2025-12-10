@@ -20,15 +20,20 @@ const Index = () => {
     checkAssignment,
     resetDraw,
     updateAdminPin,
+    wipeParticipants,
   } = useSecretSanta();
 
   const isDrawn = drawState?.is_drawn ?? false;
 
-  const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
-    { id: "join", label: "Join", icon: <Users className="w-4 h-4" /> },
+  const tabs: { id: Tab; label: string; icon: React.ReactNode; hidden?: boolean }[] = [
+    { id: "join", label: "Join", icon: <Users className="w-4 h-4" />, hidden: isDrawn },
     { id: "check", label: "Check", icon: <Search className="w-4 h-4" /> },
     { id: "admin", label: "Admin", icon: <Shield className="w-4 h-4" /> },
   ];
+
+  // Switch to check tab when draw happens and user is on join tab
+  const visibleTabs = tabs.filter(tab => !tab.hidden);
+  const effectiveTab = isDrawn && activeTab === "join" ? "check" : activeTab;
 
   if (loading) {
     return (
@@ -70,12 +75,12 @@ const Index = () => {
         {/* Tab Navigation */}
         <nav className="flex justify-center mb-6">
           <div className="inline-flex bg-secondary/50 rounded-lg p-1 gap-1">
-            {tabs.map((tab) => (
+            {visibleTabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                  activeTab === tab.id
+                  effectiveTab === tab.id
                     ? "bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
@@ -95,25 +100,17 @@ const Index = () => {
           </section>
 
           {/* Tab Content */}
-          {activeTab === "join" && (
+          {effectiveTab === "join" && !isDrawn && (
             <section className="festive-card p-4 sm:p-6">
               <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5 text-primary" />
                 Join the Draw
               </h2>
-              {isDrawn ? (
-                <div className="text-center py-6">
-                  <p className="text-muted-foreground">
-                    The draw is complete! Switch to "Check" to see your assignment.
-                  </p>
-                </div>
-              ) : (
-                <JoinForm onJoin={addParticipant} disabled={isDrawn} />
-              )}
+              <JoinForm onJoin={addParticipant} disabled={isDrawn} />
             </section>
           )}
 
-          {activeTab === "check" && (
+          {effectiveTab === "check" && (
             <section className="festive-card p-4 sm:p-6">
               <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
                 <Search className="w-5 h-5 text-primary" />
@@ -132,13 +129,14 @@ const Index = () => {
             </section>
           )}
 
-          {activeTab === "admin" && (
+          {effectiveTab === "admin" && (
             <AdminPanel
               participantCount={participants.length}
               isDrawn={isDrawn}
               onDraw={performDraw}
               onReset={resetDraw}
               onUpdatePin={updateAdminPin}
+              onWipe={wipeParticipants}
             />
           )}
         </main>
