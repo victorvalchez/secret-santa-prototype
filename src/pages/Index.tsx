@@ -16,6 +16,7 @@ const Index = () => {
     drawState,
     loading,
     addParticipant,
+    removeParticipant,
     performDraw,
     checkAssignment,
     resetDraw,
@@ -27,13 +28,17 @@ const Index = () => {
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode; hidden?: boolean }[] = [
     { id: "join", label: "Unirse", icon: <Users className="w-4 h-4" />, hidden: isDrawn },
-    { id: "check", label: "Consultar", icon: <Search className="w-4 h-4" /> },
+    { id: "check", label: "Consultar", icon: <Search className="w-4 h-4" />, hidden: !isDrawn },
     { id: "admin", label: "Administrar", icon: <Shield className="w-4 h-4" /> },
   ];
 
   // Switch to check tab when draw happens and user is on join tab
   const visibleTabs = tabs.filter(tab => !tab.hidden);
-  const effectiveTab = isDrawn && activeTab === "join" ? "check" : activeTab;
+  const effectiveTab = (() => {
+    if (isDrawn && activeTab === "join") return "check";
+    if (!isDrawn && activeTab === "check") return "join";
+    return activeTab;
+  })();
 
   if (loading) {
     return (
@@ -131,12 +136,14 @@ const Index = () => {
 
           {effectiveTab === "admin" && (
             <AdminPanel
+              participants={participants.map(({ id, name }) => ({ id, name }))}
               participantCount={participants.length}
               isDrawn={isDrawn}
               onDraw={performDraw}
               onReset={resetDraw}
               onUpdatePin={updateAdminPin}
               onWipe={wipeParticipants}
+              onRemoveParticipant={removeParticipant}
             />
           )}
         </main>

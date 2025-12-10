@@ -99,20 +99,22 @@ export function useSecretSanta() {
     }
   };
 
-  const removeParticipant = async (id: string) => {
+  const removeParticipant = async (id: string, adminPin: string) => {
     if (drawState?.is_drawn) {
       toast.error("No puedes eliminar personas después del sorteo");
       return false;
     }
 
+    if (drawState?.admin_pin !== adminPin) {
+      toast.error("PIN de administración inválido");
+      return false;
+    }
+
     try {
-      const { error } = await supabase
-        .from("participants")
-        .delete()
-        .eq("id", id);
+      const { error } = await supabase.from("participants").delete().eq("id", id);
 
       if (error) throw error;
-      setParticipants(participants.filter(p => p.id !== id));
+      setParticipants(prev => prev.filter(p => p.id !== id));
       toast.info("Persona participante eliminada");
       return true;
     } catch (error) {
@@ -167,19 +169,20 @@ export function useSecretSanta() {
       return false;
     }
 
-    // Create derangement
-    const shuffled = createDerangement(participants.map(p => p.id));
-    
     try {
-      // Update each participant with their assignment
-      for (let i = 0; i < participants.length; i++) {
-        const { error } = await supabase
-          .from("participants")
-          .update({ assigned_to: shuffled[i] })
-          .eq("id", participants[i].id);
-        
-        if (error) throw error;
-      }
+      // Shuffle participants so join order doesn't influence the cycle
+      const shuffledParticipants = secureShuffle(participants);
+
+      // Update each participant with the next person in the shuffled cycle
+      await Promise.all(
+        shuffledParticipants.map((participant, index) => {
+          const receiver = shuffledParticipants[(index + 1) % shuffledParticipants.length];
+          return supabase
+            .from("participants")
+            .update({ assigned_to: receiver.id })
+            .eq("id", participant.id);
+        })
+      );
 
       // Update draw state
       const { error: stateError } = await supabase
@@ -286,31 +289,44 @@ export function useSecretSanta() {
     drawState,
     loading,
     addParticipant,
-    removeParticipant,
     wipeParticipants,
     performDraw,
     checkAssignment,
     resetDraw,
     updateAdminPin,
+    removeParticipant,
     refetch: fetchData,
   };
 }
 
-function createDerangement(arr: string[]): string[] {
-  const n = arr.length;
-  let derangement: string[];
-  let isValid = false;
-  let attempts = 0;
+function secureShuffle<T>(input: T[]): T[] {
+  const arr = [...input];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = secureRandomInt(i + 1);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
-  while (!isValid && attempts < 1000) {
-    attempts++;
-    derangement = [...arr].sort(() => Math.random() - 0.5);
-    isValid = arr.every((item, index) => item !== derangement[index]);
+function secureRandomInt(maxExclusive: number): number {
+  if (maxExclusive <= 1) {
+    return 0;
   }
 
-  if (!isValid) {
-    derangement = [...arr.slice(1), arr[0]];
+  const cryptoObj = typeof globalThis !== "undefined" ? globalThis.crypto : undefined;
+
+  if (cryptoObj?.getRandomValues) {
+    const array = new Uint32Array(1);
+    const maxValid = 0xffffffff - (0xffffffff % maxExclusive);
+    let randomNumber = 0xffffffff;
+
+    while (randomNumber >= maxValid) {
+      cryptoObj.getRandomValues(array);
+      randomNumber = array[0];
+    }
+
+    return randomNumber % maxExclusive;
   }
 
-  return derangement!;
+  return Math.floor(Math.random() * maxExclusive);
 }

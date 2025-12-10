@@ -1,16 +1,28 @@
 import { useState } from "react";
-import { Shield, Sparkles, RotateCcw, Settings, Eye, EyeOff, Trash2 } from "lucide-react";
+import { Shield, Sparkles, RotateCcw, Settings, Eye, EyeOff, Trash2, UserMinus2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface AdminPanelProps {
+  participants: { id: string; name: string }[];
   participantCount: number;
   isDrawn: boolean;
   onDraw: (pin: string) => Promise<boolean>;
   onReset: (pin: string) => Promise<boolean>;
   onUpdatePin: (oldPin: string, newPin: string) => Promise<boolean>;
   onWipe: (pin: string) => Promise<boolean>;
+  onRemoveParticipant: (participantId: string, pin: string) => Promise<boolean>;
 }
 
-const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, onWipe }: AdminPanelProps) => {
+const AdminPanel = ({
+  participants,
+  participantCount,
+  isDrawn,
+  onDraw,
+  onReset,
+  onUpdatePin,
+  onWipe,
+  onRemoveParticipant,
+}: AdminPanelProps) => {
   const [pin, setPin] = useState("");
   const [showPin, setShowPin] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -54,6 +66,18 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
       setNewPin("");
       setShowSettings(false);
     }
+  };
+
+  const handleRemove = async (participantId: string, participantName: string) => {
+    if (isDrawn) return;
+    if (!pin || pin.length < 4) {
+      toast.error("Ingresa el PIN de administración antes de eliminar a alguien");
+      return;
+    }
+    if (!confirm(`¿Eliminar a ${participantName}?`)) return;
+    setLoading(true);
+    await onRemoveParticipant(participantId, pin);
+    setLoading(false);
   };
 
   return (
@@ -179,6 +203,38 @@ const AdminPanel = ({ participantCount, isDrawn, onDraw, onReset, onUpdatePin, o
               <Trash2 className="w-4 h-4" />
               Eliminar a todas las personas participantes
             </button>
+          )}
+
+          {!isDrawn && participantCount > 0 && (
+            <div className="border-t border-border/50 pt-4 mt-4">
+              <h3 className="font-semibold text-sm text-foreground mb-2">Eliminar participantes individuales</h3>
+              <p className="text-xs text-muted-foreground mb-3">
+                Selecciona a la persona a eliminar. Usa el mismo PIN ingresado arriba.
+              </p>
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                {participants.map((participant, index) => (
+                  <div
+                    key={participant.id}
+                    className="flex items-center justify-between bg-secondary/50 rounded-md px-3 py-2"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-primary bg-primary/10 rounded-full px-2 py-1">
+                        #{index + 1}
+                      </span>
+                      <span className="text-sm font-medium">{participant.name}</span>
+                    </div>
+                    <button
+                      onClick={() => handleRemove(participant.id, participant.name)}
+                      disabled={loading}
+                      className="inline-flex items-center gap-1 text-xs text-destructive hover:text-destructive/80 disabled:opacity-50"
+                    >
+                      <UserMinus2 className="w-4 h-4" />
+                      Quitar
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}
