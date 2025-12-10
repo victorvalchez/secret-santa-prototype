@@ -14,7 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      draw_state: {
+        Row: {
+          admin_pin: string
+          created_at: string
+          drawn_at: string | null
+          id: string
+          is_drawn: boolean
+        }
+        Insert: {
+          admin_pin?: string
+          created_at?: string
+          drawn_at?: string | null
+          id?: string
+          is_drawn?: boolean
+        }
+        Update: {
+          admin_pin?: string
+          created_at?: string
+          drawn_at?: string | null
+          id?: string
+          is_drawn?: boolean
+        }
+        Relationships: []
+      }
+      participants: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          id: string
+          name: string
+          pin: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          pin: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          pin?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "participants_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

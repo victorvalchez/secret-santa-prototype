@@ -1,59 +1,50 @@
 import { useState } from "react";
-import { Gift } from "lucide-react";
-import { toast } from "sonner";
+import { Gift, Users, Shield, Search } from "lucide-react";
 import Snowfall from "@/components/Snowfall";
-import ParticipantInput from "@/components/ParticipantInput";
-import ParticipantList from "@/components/ParticipantList";
-import DrawButton from "@/components/DrawButton";
-import ResultsList from "@/components/ResultsList";
-import { performSecretSantaDraw } from "@/lib/secretSanta";
+import JoinForm from "@/components/JoinForm";
+import ParticipantsList from "@/components/ParticipantsList";
+import AdminPanel from "@/components/AdminPanel";
+import CheckAssignment from "@/components/CheckAssignment";
+import { useSecretSanta } from "@/hooks/useSecretSanta";
+
+type Tab = "join" | "check" | "admin";
 
 const Index = () => {
-  const [participants, setParticipants] = useState<string[]>([]);
-  const [assignments, setAssignments] = useState<{ giver: string; receiver: string }[]>([]);
-  const [hasDrawn, setHasDrawn] = useState(false);
+  const [activeTab, setActiveTab] = useState<Tab>("join");
+  const {
+    participants,
+    drawState,
+    loading,
+    addParticipant,
+    performDraw,
+    checkAssignment,
+    resetDraw,
+    updateAdminPin,
+  } = useSecretSanta();
 
-  const handleAddParticipant = (name: string) => {
-    if (participants.includes(name)) {
-      toast.error("This name is already in the list!");
-      return;
-    }
-    setParticipants([...participants, name]);
-    toast.success(`${name} added to the list!`);
-  };
+  const isDrawn = drawState?.is_drawn ?? false;
 
-  const handleRemoveParticipant = (index: number) => {
-    const name = participants[index];
-    setParticipants(participants.filter((_, i) => i !== index));
-    toast.info(`${name} removed from the list`);
-  };
+  const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
+    { id: "join", label: "Join", icon: <Users className="w-4 h-4" /> },
+    { id: "check", label: "Check", icon: <Search className="w-4 h-4" /> },
+    { id: "admin", label: "Admin", icon: <Shield className="w-4 h-4" /> },
+  ];
 
-  const handleDraw = () => {
-    try {
-      const results = performSecretSantaDraw(participants);
-      setAssignments(results);
-      setHasDrawn(true);
-      toast.success("Secret Santa draw complete! 🎅", {
-        description: "Tap each card to reveal assignments",
-      });
-    } catch (error) {
-      toast.error("Something went wrong with the draw");
-    }
-  };
-
-  const handleReset = () => {
-    setParticipants([]);
-    setAssignments([]);
-    setHasDrawn(false);
-    toast.info("Starting fresh!");
-  };
-
-  const canDraw = participants.length >= 3;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Gift className="w-12 h-12 mx-auto text-accent animate-bounce-subtle mb-4" />
+          <p className="text-muted-foreground">Loading Secret Santa...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       <Snowfall />
-      
+
       <div className="container py-8 sm:py-12 relative z-10">
         {/* Header */}
         <header className="text-center mb-8 sm:mb-12">
@@ -64,59 +55,92 @@ const Index = () => {
             Secret Santa
           </h1>
           <p className="text-muted-foreground text-lg">
-            Draw names for your holiday gift exchange
+            {isDrawn 
+              ? "Draw complete! Check your assignment below"
+              : "Join the gift exchange"}
           </p>
+          {isDrawn && (
+            <div className="inline-flex items-center gap-2 mt-3 bg-accent/20 text-accent px-4 py-2 rounded-full text-sm font-medium">
+              <Gift className="w-4 h-4" />
+              Draw Complete
+            </div>
+          )}
         </header>
 
-        {/* Main Content */}
-        <main className="space-y-6">
-          {!hasDrawn ? (
-            <>
-              {/* Add Participants Section */}
-              <section className="festive-card p-4 sm:p-6">
-                <h2 className="font-display text-xl font-semibold mb-4">
-                  Add Participants
-                </h2>
-                <ParticipantInput 
-                  onAdd={handleAddParticipant} 
-                  disabled={hasDrawn}
-                />
-              </section>
+        {/* Tab Navigation */}
+        <nav className="flex justify-center mb-6">
+          <div className="inline-flex bg-secondary/50 rounded-lg p-1 gap-1">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                  activeTab === tab.id
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {tab.icon}
+                <span className="hidden sm:inline">{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        </nav>
 
-              {/* Participants List */}
-              <section className="festive-card p-4 sm:p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-display text-xl font-semibold">
-                    Participants
-                  </h2>
-                  <span className="text-sm text-muted-foreground bg-secondary px-3 py-1 rounded-full">
-                    {participants.length} {participants.length === 1 ? "person" : "people"}
-                  </span>
-                </div>
-                <ParticipantList
-                  participants={participants}
-                  onRemove={handleRemoveParticipant}
-                  disabled={hasDrawn}
-                />
-              </section>
-            </>
-          ) : (
-            /* Results Section */
+        {/* Main Content */}
+        <main className="max-w-md mx-auto space-y-6">
+          {/* Participants List - Always visible */}
+          <section className="festive-card p-4 sm:p-6">
+            <ParticipantsList participants={participants} isDrawn={isDrawn} />
+          </section>
+
+          {/* Tab Content */}
+          {activeTab === "join" && (
             <section className="festive-card p-4 sm:p-6">
-              <ResultsList assignments={assignments} />
+              <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-primary" />
+                Join the Draw
+              </h2>
+              {isDrawn ? (
+                <div className="text-center py-6">
+                  <p className="text-muted-foreground">
+                    The draw is complete! Switch to "Check" to see your assignment.
+                  </p>
+                </div>
+              ) : (
+                <JoinForm onJoin={addParticipant} disabled={isDrawn} />
+              )}
             </section>
           )}
 
-          {/* Draw Button */}
-          <section>
-            <DrawButton
-              onDraw={handleDraw}
-              onReset={handleReset}
-              canDraw={canDraw}
-              hasDrawn={hasDrawn}
+          {activeTab === "check" && (
+            <section className="festive-card p-4 sm:p-6">
+              <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
+                <Search className="w-5 h-5 text-primary" />
+                Check Your Assignment
+              </h2>
+              {!isDrawn ? (
+                <div className="text-center py-6">
+                  <Gift className="w-12 h-12 mx-auto text-muted-foreground/50 mb-3" />
+                  <p className="text-muted-foreground">
+                    Waiting for the admin to perform the draw...
+                  </p>
+                </div>
+              ) : (
+                <CheckAssignment onCheck={checkAssignment} />
+              )}
+            </section>
+          )}
+
+          {activeTab === "admin" && (
+            <AdminPanel
               participantCount={participants.length}
+              isDrawn={isDrawn}
+              onDraw={performDraw}
+              onReset={resetDraw}
+              onUpdatePin={updateAdminPin}
             />
-          </section>
+          )}
         </main>
 
         {/* Footer */}
