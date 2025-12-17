@@ -1,73 +1,128 @@
-# Welcome to your Lovable project
+# Secret Santa Prototype
 
-## Project info
+A web application for organizing and managing Secret Santa gift exchanges with friends, family, or coworkers.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## What is this?
 
-## How can I edit this code?
+Secret Santa Prototype is a digital solution for coordinating Secret Santa events. It allows organizers to create gift exchange events, invite participants, and automatically assign gift recipients while maintaining secrecy. The app handles all the logistics of pairing people together and ensures no one gets assigned to themselves.
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- **Event Creation**: Set up new Secret Santa events with customizable details
+- **Participant Management**: Easily invite and manage participants
+- **Automated Assignment**: Randomly assigns Secret Santa pairings
+- **Secure & Private**: Built with Supabase for secure data storage
+- **Modern UI**: Clean, responsive interface built with shadcn/ui components
+- **Real-time Updates**: Powered by React Query for seamless data synchronization
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## How to Use
 
-Changes made via Lovable will be committed automatically to this repo.
+### For Organizers
 
-**Use your preferred IDE**
+1. **Create an Event**: Start a new Secret Santa event and configure the details
+2. **Invite Participants**: Add participants via email or shareable link
+3. **Assign Pairings**: Once all participants have joined, trigger the automatic assignment
+4. **Monitor Progress**: Track who has viewed their assignment and participation status
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### For Participants
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. **Join an Event**: Accept the invitation to participate
+2. **View Your Assignment**: See who you're buying a gift for (kept secret from others)
+3. **Get Reminders**: Receive notifications about important dates and deadlines
 
-Follow these steps:
+## Tech Stack
+
+This project is built with modern web technologies:
+
+- **Vite** - Fast build tool and development server
+- **TypeScript** - Type-safe JavaScript
+- **React** - UI framework
+- **React Router** - Client-side routing
+- **Supabase** - Backend as a service (authentication & database)
+- **shadcn/ui** - High-quality React components
+- **Tailwind CSS** - Utility-first CSS framework
+- **React Hook Form + Zod** - Form handling and validation
+- **TanStack Query** - Data fetching and caching
+- **Lucide React** - Icon library
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher recommended)
+- npm or bun package manager
+
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Clone the repository
+git clone https://github.com/victorvalchez/secret-santa-prototype.git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to the project directory
+cd secret-santa-prototype
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
+# or if using bun
+bun install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Set up environment variables
+# Copy .env file and add your Supabase credentials
+cp .env.example .env
+
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Environment Setup
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Create a `.env` file in the root directory with your Supabase credentials:
 
-**Use GitHub Codespaces**
+```env
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Available Scripts
 
-## What technologies are used for this project?
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build for production
+- `npm run build:dev` - Build in development mode
+- `npm run lint` - Run ESLint for code quality
+- `npm run preview` - Preview production build locally
 
-This project is built with:
+## Development
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+The application follows a standard React + Vite structure:
 
-## How can I deploy this project?
+```
+src/
+├── components/     # Reusable UI components
+├── pages/         # Route components
+├── hooks/         # Custom React hooks
+├── lib/           # Utility functions and configurations
+└── types/         # TypeScript type definitions
+```
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Deployment
 
-## Can I connect a custom domain to my Lovable project?
+The application can be deployed to any static hosting service that supports single-page applications:
 
-Yes, you can!
+- Vercel
+- Netlify
+- GitHub Pages
+- Cloudflare Pages
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Make sure to configure environment variables in your hosting platform's settings.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This is a prototype project. Please check with the repository owner for licensing information.
+
+---
+
+Built with ❤️ for easier holiday gift exchanges
