@@ -4,7 +4,7 @@ A web application for organizing and managing Secret Santa gift exchanges with f
 
 ## What is this?
 
-Secret Santa Prototype is a digital solution for coordinating Secret Santa events. It allows organizers to create gift exchange events, invite participants, and automatically assign gift recipients while maintaining secrecy. The app handles all the logistics of pairing people together and ensures no one gets assigned to themselves.
+Secret Santa Prototype is a digital solution for coordinating Secret Santa events. It allows organizers to create gift exchange events, and automatically assign gift recipients while maintaining secrecy. The app handles all the logistics of pairing people together and ensures no one gets assigned to themselves.
 
 ## Features
 
@@ -20,15 +20,14 @@ Secret Santa Prototype is a digital solution for coordinating Secret Santa event
 ### For Organizers
 
 1. **Create an Event**: Start a new Secret Santa event and configure the details
-2. **Invite Participants**: Add participants via email or shareable link
+2. **Invite Participants**: Tell them to join using the deployment link
 3. **Assign Pairings**: Once all participants have joined, trigger the automatic assignment
 4. **Monitor Progress**: Track who has viewed their assignment and participation status
 
 ### For Participants
 
-1. **Join an Event**: Accept the invitation to participate
+1. **Join an Event**: Register using your name and PIN
 2. **View Your Assignment**: See who you're buying a gift for (kept secret from others)
-3. **Get Reminders**: Receive notifications about important dates and deadlines
 
 ## Tech Stack
 
